@@ -18,32 +18,11 @@ class PurchaseRequest extends AbstractRequest
 		'purchase'   => 'https://www.paytr.com/odeme/api/get-token'
 	);
 
-	/*
-	protected $currencies = [
-		'TRY' => 'TRY',
-		'USD' => 'USD',
-		'EUR' => 'EUR'
-	];
-	*/
-
 	public function getData()
 	{
-		//$currency             = $this->getCurrency();
-		//$data['currency']       = $this->getCurrency();
 		$data['orderID']      = $this->getOrderId();
-		//$data['currencyCode'] = $this->currencies[$currency];
-		$data['installment']  = $this->getInstallment();
 		return $data;
 	}
-
-	/*
-	public function getAmountIntegerCustom()
-	{
-		//return Money::TRY($this->getParameter('amount'))->getAmount();
-		return $this->getAmountInteger();
-		//return (int)$this->getParameter('amount');
-	}
-	*/
 
 	public function sendData($data)
 	{
@@ -51,8 +30,8 @@ class PurchaseRequest extends AbstractRequest
 		$email             = $this->getCard()->getEmail();
 		$payment_amount    = $this->getAmountInteger();
 
-		$no_installment    = 0;
-		$max_installment   = $this->getInstallment();
+		$no_installment   = $this->getNoInstallment();
+		$max_installment   = $this->getMaxInstallment();
 		$user_name         = $this->getCard()->getFirstName() . " " . $this->getCard()->getLastName();
 		$user_address      = $this->getCard()->getBillingAddress1() . " " . $this->getCard()->getBillingAddress2();
 		$user_phone        = $this->getCard()->getBillingPhone();
@@ -75,7 +54,6 @@ class PurchaseRequest extends AbstractRequest
 
 			'paytr_token'      => $token,
 			'payment_amount'   => $payment_amount,
-			//'currency'   => 'TRY',
 
 			'no_installment'   => $no_installment,
 			'max_installment'  => $max_installment,
@@ -152,6 +130,16 @@ class PurchaseRequest extends AbstractRequest
 	public function setNoInstallment($value)
 	{
 		return $this->setParameter('no_installment', $value);
+	}
+
+	public function getMaxInstallment()
+	{
+		return $this->getParameter('max_installment');
+	}
+
+	public function setMaxInstallment($value)
+	{
+		return $this->setParameter('max_installment', $value);
 	}
 
 	public function getIp()
