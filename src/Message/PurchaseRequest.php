@@ -13,172 +13,173 @@ use Omnipay\Common\Message\AbstractRequest;
 class PurchaseRequest extends AbstractRequest
 {
 
-	protected $endpoint = '';
-	protected $endpoints = array(
-		'purchase'   => 'https://www.paytr.com/odeme/api/get-token'
-	);
+    protected $endpoint = '';
+    protected $endpoints = array(
+        'purchase' => 'https://www.paytr.com/odeme/api/get-token'
+    );
 
-	public function getData()
-	{
-		$data['orderID']      = $this->getOrderId();
-		return $data;
-	}
+    public function getData()
+    {
+        $data['orderID'] = $this->getOrderId();
+        return $data;
+    }
 
-	public function sendData($data)
-	{
+    public function getOrderId()
+    {
+        return $this->getParameter('orderid');
+    }
 
-		$email             = $this->getCard()->getEmail();
-		$payment_amount    = $this->getAmountInteger();
+    public function sendData($data)
+    {
 
-		$no_installment   = $this->getNoInstallment();
-		$max_installment   = $this->getMaxInstallment();
-		$user_name         = $this->getCard()->getFirstName() . " " . $this->getCard()->getLastName();
-		$user_address      = $this->getCard()->getBillingAddress1() . " " . $this->getCard()->getBillingAddress2();
-		$user_phone        = $this->getCard()->getBillingPhone();
+        $email = $this->getCard()->getEmail();
+        $payment_amount = $this->getAmountInteger();
 
-		$user_basket       = base64_encode(json_encode($this->getBasket()));
+        $no_installment = $this->getNoInstallment();
+        $max_installment = $this->getMaxInstallment();
+        $user_name = $this->getCard()->getFirstName() . " " . $this->getCard()->getLastName();
+        $user_address = $this->getCard()->getBillingAddress1() . " " . $this->getCard()->getBillingAddress2();
+        $user_phone = $this->getCard()->getBillingPhone();
 
-		$urlOk = env('PAYTR_OK_URL');
-		$urlFail = env('PAYTR_FAIL_URL');
+        $user_basket = base64_encode(json_encode($this->getBasket()));
 
-		$hash          		   = $this->getMerchantNo() . $this->getIp() . $this->getOrderId() . $email . $payment_amount . $user_basket . $no_installment . $max_installment;
-		$token       	       = base64_encode(hash_hmac('sha256', $hash . $this->getMerchantSalt(), $this->getMerchantKey(), true));
+        $urlOk = env('PAYTR_OK_URL');
+        $urlFail = env('PAYTR_FAIL_URL');
 
-		$post_vals = array(
-			'debug_on'         => $this->getTestMode() ? 1 : 0,
-			'merchant_id'      => $this->getMerchantNo(),
-			'user_ip'          => $this->getIp(),
-			'merchant_oid'     => $this->getOrderId(),
-			'merchant_ok_url'  => $urlOk . "",
-			'merchant_fail_url' => $urlFail . "",
+        $hash = $this->getMerchantNo() . $this->getIp() . $this->getOrderId() . $email . $payment_amount . $user_basket . $no_installment . $max_installment;
+        $token = base64_encode(hash_hmac('sha256', $hash . $this->getMerchantSalt(), $this->getMerchantKey(), true));
 
-			'paytr_token'      => $token,
-			'payment_amount'   => $payment_amount,
+        $post_vals = array(
+            'debug_on' => $this->getTestMode() ? 1 : 0,
+            'merchant_id' => $this->getMerchantNo(),
+            'user_ip' => $this->getIp(),
+            'merchant_oid' => $this->getOrderId(),
+            'merchant_ok_url' => $urlOk . "",
+            'merchant_fail_url' => $urlFail . "",
 
-			'no_installment'   => $no_installment,
-			'max_installment'  => $max_installment,
+            'paytr_token' => $token,
+            'payment_amount' => $payment_amount,
 
-			'user_basket'      => $user_basket,
-			'email'            => $email,
-			'user_name'        => $user_name,
-			'user_address'     => $user_address,
-			'user_phone'       => $user_phone,
-		);
+            'no_installment' => $no_installment,
+            'max_installment' => $max_installment,
 
-		$ch = curl_init();
+            'user_basket' => $user_basket,
+            'email' => $email,
+            'user_name' => $user_name,
+            'user_address' => $user_address,
+            'user_phone' => $user_phone,
+        );
 
-		curl_setopt($ch, CURLOPT_URL, $this->endpoints['purchase']);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_vals);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-		curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+        $ch = curl_init();
 
-		$result = @curl_exec($ch);
+        curl_setopt($ch, CURLOPT_URL, $this->endpoints['purchase']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_vals);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 20);
 
-		curl_close($ch);
+        $result = @curl_exec($ch);
 
-		return $this->response = new Response($this, $result);
-	}
+        curl_close($ch);
 
-	public function getMerchantNo()
-	{
-		return $this->getParameter('merchantNo');
-	}
+        return $this->response = new Response($this, $result);
+    }
 
-	public function setMerchantNo($value)
-	{
-		return $this->setParameter('merchantNo', $value);
-	}
+    public function getNoInstallment()
+    {
+        return $this->getParameter('no_installment');
+    }
 
-	public function getMerchantKey()
-	{
-		return $this->getParameter('merchantKey');
-	}
+    public function getMaxInstallment()
+    {
+        return $this->getParameter('max_installment');
+    }
 
-	public function setMerchantKey($value)
-	{
-		return $this->setParameter('merchantKey', $value);
-	}
+    public function getBasket()
+    {
+        return $this->getParameter('basket');
+    }
 
-	public function getMerchantSalt()
-	{
-		return $this->getParameter('merchantSalt');
-	}
+    public function getMerchantNo()
+    {
+        return $this->getParameter('merchantNo');
+    }
 
-	public function setMerchantSalt($value)
-	{
-		return $this->setParameter('merchantSalt', $value);
-	}
+    public function getIp()
+    {
+        return $this->getParameter('ip');
+    }
 
-	public function getInstallment()
-	{
-		return $this->getParameter('installment');
-	}
+    public function getMerchantSalt()
+    {
+        return $this->getParameter('merchantSalt');
+    }
 
-	public function setInstallment($value)
-	{
-		return $this->setParameter('installment', $value);
-	}
-	public function getNoInstallment()
-	{
-		return $this->getParameter('no_installment');
-	}
+    public function getMerchantKey()
+    {
+        return $this->getParameter('merchantKey');
+    }
 
-	public function setNoInstallment($value)
-	{
-		return $this->setParameter('no_installment', $value);
-	}
+    public function setMerchantNo($value)
+    {
+        return $this->setParameter('merchantNo', $value);
+    }
 
-	public function getMaxInstallment()
-	{
-		return $this->getParameter('max_installment');
-	}
+    public function setMerchantKey($value)
+    {
+        return $this->setParameter('merchantKey', $value);
+    }
 
-	public function setMaxInstallment($value)
-	{
-		return $this->setParameter('max_installment', $value);
-	}
+    public function setMerchantSalt($value)
+    {
+        return $this->setParameter('merchantSalt', $value);
+    }
 
-	public function getIp()
-	{
-		return $this->getParameter('ip');
-	}
+    public function getInstallment()
+    {
+        return $this->getParameter('installment');
+    }
 
-	public function setIp($value)
-	{
-		return $this->setParameter('ip', $value);
-	}
+    public function setInstallment($value)
+    {
+        return $this->setParameter('installment', $value);
+    }
 
-	public function getTransId()
-	{
-		return $this->getParameter('transId');
-	}
+    public function setNoInstallment($value)
+    {
+        return $this->setParameter('no_installment', $value);
+    }
 
-	public function setTransId($value)
-	{
-		return $this->setParameter('transId', $value);
-	}
+    public function setMaxInstallment($value)
+    {
+        return $this->setParameter('max_installment', $value);
+    }
 
-	public function getOrderId()
-	{
-		return $this->getParameter('orderid');
-	}
+    public function setIp($value)
+    {
+        return $this->setParameter('ip', $value);
+    }
 
-	public function setOrderId($value)
-	{
-		return $this->setParameter('orderid', $value);
-	}
+    public function getTransId()
+    {
+        return $this->getParameter('transId');
+    }
 
-	public function getBasket()
-	{
-		return $this->getParameter('basket');
-	}
+    public function setTransId($value)
+    {
+        return $this->setParameter('transId', $value);
+    }
 
-	public function setBasket($value)
-	{
-		return $this->setParameter('basket', $value);
-	}
+    public function setOrderId($value)
+    {
+        return $this->setParameter('orderid', $value);
+    }
+
+    public function setBasket($value)
+    {
+        return $this->setParameter('basket', $value);
+    }
 }

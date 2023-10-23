@@ -14,31 +14,31 @@ class CompletePurchaseRequest extends BasePurchaseRequest
 {
 
 
-	public function getData()
-	{
-	}
+    public function getData()
+    {
+    }
 
-	public function sendData($data)
-	{
-	}
+    public function sendData($data)
+    {
+    }
 
-	public function getMerchantKey()
-	{
-		return $this->getParameter('merchantKey');
-	}
+    public function getMerchantKey()
+    {
+        return $this->getParameter('merchantKey');
+    }
 
-	public function setMerchantKey($value)
-	{
-		return $this->setParameter('merchantKey', $value);
-	}
+    public function setMerchantKey($value)
+    {
+        return $this->setParameter('merchantKey', $value);
+    }
 
-	public function getMerchantSalt()
-	{
-		return $this->getParameter('merchantSalt');
-	}
+    public function getMerchantSalt()
+    {
+        return $this->getParameter('merchantSalt');
+    }
 
-	public function setMerchantSalt($value)
-	{
-		return $this->setParameter('merchantSalt', $value);
-	}
+    public function setMerchantSalt($value)
+    {
+        return $this->setParameter('merchantSalt', $value);
+    }
 }

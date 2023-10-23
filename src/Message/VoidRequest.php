@@ -11,7 +11,7 @@ namespace Omnipay\PayTR\Message;
 class VoidRequest extends PurchaseRequest
 {
 
-	public function getData()
-	{
-	}
+    public function getData()
+    {
+    }
 }

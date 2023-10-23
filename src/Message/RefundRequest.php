@@ -11,7 +11,7 @@ namespace Omnipay\PayTR\Message;
 class RefundRequest extends PurchaseRequest
 {
 
-	public function getData()
-	{
-	}
+    public function getData()
+    {
+    }
 }

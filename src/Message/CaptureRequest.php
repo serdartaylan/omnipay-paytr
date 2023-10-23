@@ -11,7 +11,7 @@ namespace Omnipay\PayTR\Message;
 class CaptureRequest extends PurchaseRequest
 {
 
-	public function getData()
-	{
-	}
+    public function getData()
+    {
+    }
 }

@@ -1,42 +1,42 @@
 {
-    "name": "serdartaylan/omnipay-paytr",
-    "type": "library",
-    "description": "PayTR iFrame (Bonus, World, Axess, Cardfinans, Maximum, AsyaCard, Paraf sanal pos) gateway for Omnipay payment processing library",
-    "keywords": [
-        "paytr",
-        "yapıkredi bankası",
-        "sanal pos",
-        "gateway",
-        "merchant",
-        "omnipay",
-        "pay",
-        "payment"
-    ],
-    "homepage": "https://github.com/serdartaylan/omnipay-paytr",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Serdar TAYLAN",
-            "email": "serdartaylan@gmail.com"
-        },
-		{
-            "name": "Yasin Kuyu",
-            "email": "yasinkuyu@gmail.com"
-        },
-        {
-            "name": "Omnipay Contributors",
-            "homepage": "https://github.com/yasinkuyu/omnipay-paytr/contributors"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Omnipay\\PayTR\\": "src/"
-        }
+  "name": "serdartaylan/omnipay-paytr",
+  "type": "library",
+  "description": "PayTR iFrame (Bonus, World, Axess, Cardfinans, Maximum, AsyaCard, Paraf sanal pos) gateway for Omnipay payment processing library",
+  "keywords": [
+    "paytr",
+    "yapıkredi bankası",
+    "sanal pos",
+    "gateway",
+    "merchant",
+    "omnipay",
+    "pay",
+    "payment"
+  ],
+  "homepage": "https://github.com/serdartaylan/omnipay-paytr",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Serdar TAYLAN",
+      "email": "serdartaylan@gmail.com"
     },
-    "require": {
-        "league/omnipay": "^3.1.0"
+    {
+      "name": "Yasin Kuyu",
+      "email": "yasinkuyu@gmail.com"
     },
-    "require-dev": {
-        "league/omnipay": "^3.1.0"
+    {
+      "name": "Omnipay Contributors",
+      "homepage": "https://github.com/yasinkuyu/omnipay-paytr/contributors"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Omnipay\\PayTR\\": "src/"
+    }
+  },
+  "require": {
+    "league/omnipay": "^3.1.0"
+  },
+  "require-dev": {
+    "league/omnipay": "^3.1.0"
+  }
 }
