@@ -43,9 +43,6 @@ class PurchaseRequest extends AbstractRequest
 
         $user_basket = base64_encode(json_encode($this->getBasket()));
 
-        $urlOk = env('PAYTR_OK_URL');
-        $urlFail = env('PAYTR_FAIL_URL');
-
         $hash = $this->getMerchantNo() . $this->getIp() . $this->getOrderId() . $email . $payment_amount . $user_basket . $no_installment . $max_installment;
         $token = base64_encode(hash_hmac('sha256', $hash . $this->getMerchantSalt(), $this->getMerchantKey(), true));
 
@@ -54,8 +51,8 @@ class PurchaseRequest extends AbstractRequest
             'merchant_id' => $this->getMerchantNo(),
             'user_ip' => $this->getIp(),
             'merchant_oid' => $this->getOrderId(),
-            'merchant_ok_url' => $urlOk . "",
-            'merchant_fail_url' => $urlFail . "",
+            'merchant_ok_url' => $this->getReturnUrl(),
+            'merchant_fail_url' => $this->getCancelUrl(),
 
             'paytr_token' => $token,
             'payment_amount' => $payment_amount,
